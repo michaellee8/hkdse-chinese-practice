@@ -80,7 +80,7 @@ func UploadFromDataDir(ctx context.Context, dirpath string, app *firebase.App) (
 }
 
 type ChineseTwelveEssayEntry struct {
-	Name       string                 `json:"name"`
-	Original   *hkdse.OriginalEssay   `json:"original"`
-	Translated *hkdse.TranslatedEssay `json:"translated"`
+	Name       string                 `json:"name" firestore:"name"`
+	Original   *hkdse.OriginalEssay   `json:"original" firestore:"original"`
+	Translated *hkdse.TranslatedEssay `json:"translated" firestore:"translated"`
 }

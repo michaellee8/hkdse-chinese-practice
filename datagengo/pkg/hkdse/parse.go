@@ -116,22 +116,22 @@ func ParseParagraphTextToSubNodes(text string) (subNodes []ParagraphSubNode, err
 }
 
 type OriginalEssay struct {
-	Name            string      `json:"name"`
-	Paragraphs      []Paragraph `json:"paragraphs"`
-	AllTextSegments []string    `json:"allTextSegments"`
+	Name            string      `json:"name" firestore:"name"`
+	Paragraphs      []Paragraph `json:"paragraphs" firestore:"paragraphs"`
+	AllTextSegments []string    `json:"allTextSegments" firestore:"allTextSegments"`
 }
 
 type TranslatedEssay struct {
 }
 
 type Paragraph struct {
-	TextSegments []string           `json:"textSegments"`
-	SubNodes     []ParagraphSubNode `json:"subNodes"`
+	TextSegments []string           `json:"textSegments" firestore:"textSegments"`
+	SubNodes     []ParagraphSubNode `json:"subNodes" firestore:"subNodes"`
 }
 
 type ParagraphSubNode struct {
-	Type    ParagraphSubNodeType `json:"type"`
-	Content string               `json:"content"`
+	Type    ParagraphSubNodeType `json:"type" firestore:"type"`
+	Content string               `json:"content" firestore:"content"`
 }
 
 type ParagraphSubNodeType string

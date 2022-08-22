@@ -14,7 +14,6 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link as RouterLink } from "react-router-dom";
 import { LinkBehavior } from "../config/appTheme";
 
 export const drawerWidth = 240;

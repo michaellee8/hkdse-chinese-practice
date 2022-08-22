@@ -34,7 +34,6 @@ function shuffleArray<T>(array: T[]) {
 }
 
 const stopChars = new Set(["！", "。"]);
-const sepChars = new Set(["，"]);
 
 export function generateQuestionFromOriginalEssay(art: OriginalEssay): Question {
   const paragraphs = art.paragraphs.filter(

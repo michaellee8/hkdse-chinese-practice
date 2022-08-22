@@ -7,7 +7,6 @@ import {
   Box,
   FormControl,
   FormControlLabel,
-  FormLabel,
   InputLabel,
   LinearProgress,
   MenuItem,
@@ -27,7 +26,7 @@ const showAnswerDelay = 1500;
 export function OriginalTextRecitePage() {
   const firebaseApp = useContext(FirebaseContext);
   const db = getFirestore(firebaseApp);
-  const [values, loading, error, snapshot] = useCollectionData<ChineseTwelveEssayEntry>(
+  const [values, loading, error] = useCollectionData<ChineseTwelveEssayEntry>(
     collection(db, ESSAY_COLLECTION) as any
   );
   const [question, setQuestion] = useState<Question | null>(null);
@@ -46,7 +45,7 @@ export function OriginalTextRecitePage() {
   const [showSolution, setShowSolution] = useState(false);
   const [disableChoices, setDisableChoices] = useState(false);
 
-  const nextQuestion = useCallback(() => {
+  useCallback(() => {
     setQuestionNum((p) => p + 1);
   }, []);
   const [pickedAnswerIndex, setPickedAnswerIndex] = useState<number | null>(null);

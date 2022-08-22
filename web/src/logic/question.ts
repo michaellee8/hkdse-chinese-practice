@@ -24,7 +24,7 @@ function pickRandomElement<T>(arr: T[]): T {
   return arr[randInt(arr.length)];
 }
 
-function shuffleArray<T>(array: T[]): T[] {
+function shuffleArray<T>(array: T[]) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const temp = array[i];
@@ -33,12 +33,12 @@ function shuffleArray<T>(array: T[]): T[] {
   }
 }
 
-const stopChars = new Set(["！", "，"]);
+const stopChars = new Set(["！", "。"]);
 const sepChars = new Set(["，"]);
 
 export function generateQuestionFromOriginalEssay(art: OriginalEssay): Question {
   const paragraphs = art.paragraphs.filter(
-    (p) => p.subNodes.length > 0 && p.textSegments.length > 0
+    (p) => p && p.subNodes && p.textSegments && p.subNodes.length > 0 && p.textSegments.length > 0
   );
   const para = pickRandomElement(paragraphs);
   const pickedIndex = randInt(para.subNodes.length);
@@ -78,7 +78,7 @@ export function generateQuestionFromOriginalEssay(art: OriginalEssay): Question 
     choices.push(choice);
   }
   shuffleArray(choices);
-  const correctIndex = choices.findIndex(replacedSegment.content);
+  const correctIndex = choices.findIndex((c) => c === replacedSegment.content);
   return {
     choices,
     correctChoiceIndex: correctIndex,

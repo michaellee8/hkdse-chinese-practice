@@ -1,25 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import { Box, CssBaseline, ThemeProvider, Toolbar } from "@mui/material";
+import { appTheme } from "./config/appTheme";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AppNav, drawerWidth } from "./components/AppNav";
+import { OriginalTextRecitePage } from "./pages/OriginalTextRecitePage";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <CssBaseline />
+      <ThemeProvider theme={appTheme}>
+        <BrowserRouter>
+          <Box sx={{ display: "flex" }}>
+            <AppNav />
+            <Box
+              component={"main"}
+              sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+            >
+              <Toolbar />
+              <Routes>
+                <Route path={"/original-text-recite"} element={<OriginalTextRecitePage />} />
+                <Route path={"*"} element={<OriginalTextRecitePage />} />
+              </Routes>
+            </Box>
+          </Box>
+        </BrowserRouter>
+      </ThemeProvider>
+    </>
   );
 }
 

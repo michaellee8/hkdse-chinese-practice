@@ -14,6 +14,8 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import MenuIcon from "@mui/icons-material/Menu";
+import { Link as RouterLink } from "react-router-dom";
+import { LinkBehavior } from "../config/appTheme";
 
 export const drawerWidth = 240;
 
@@ -30,10 +32,14 @@ export function AppNav() {
       <Toolbar />
       <Divider />
       <List>
-        {["original-text-recite"].map((text) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemText primary={t(text)} />
+        {["original-text-recite"].map((routeName) => (
+          <ListItem key={routeName} disablePadding>
+            <ListItemButton
+              href={`/${routeName}`}
+              LinkComponent={LinkBehavior}
+              component={LinkBehavior}
+            >
+              <ListItemText primary={t(routeName)} />
             </ListItemButton>
           </ListItem>
         ))}

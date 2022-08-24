@@ -6,19 +6,15 @@ import { ChineseTwelveEssayEntry } from "../types/essay";
 import {
   Box,
   FormControl,
-  FormControlLabel,
   InputLabel,
   LinearProgress,
   MenuItem,
-  Radio,
-  RadioGroup,
   Select,
   Stack,
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { generateQuestionFromOriginalEssay, Question, QuestionNodeType } from "../logic/question";
-import { Check as CheckIcon, Clear as ClearIcon } from "@mui/icons-material";
 import { delay } from "../utils";
 
 const showAnswerDelay = 1500;
@@ -42,8 +38,8 @@ export function OriginalTextRecitePage() {
   }, [selectedArticle]);
   const [questionNum, setQuestionNum] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
-  const [showSolution, setShowSolution] = useState(false);
-  const [disableChoices, setDisableChoices] = useState(false);
+  const [, setShowSolution] = useState(false);
+  const [, setDisableChoices] = useState(false);
 
   useCallback(() => {
     setQuestionNum((p) => p + 1);
@@ -108,30 +104,6 @@ export function OriginalTextRecitePage() {
               qn.type === QuestionNodeType.PLACEHOLDER ? (
                 <Box key={idx}>
                   <FormControl fullWidth>
-{/*                     <RadioGroup
-                      name={"question-choice-picker-group"}
-                      value={pickedAnswerIndex}
-                      onChange={(evt) => setPickedAnswerIndex(parseInt(evt.target.value))}
-                    >
-                      {question?.choices.map((ch, i) => (
-                        <FormControlLabel
-                          control={<Radio disabled={disableChoices} />}
-                          label={
-                            <div>
-                              {ch}
-                              {showSolution ? (
-                                i === question?.correctChoiceIndex ? (
-                                  <CheckIcon />
-                                ) : (
-                                  <ClearIcon />
-                                )
-                              ) : null}
-                            </div>
-                          }
-                          value={i}
-                        />
-                      ))}
-                    </RadioGroup>  */}
                     <InputLabel id="question-choice-picker-group">{t("Please choose an answer.")}</InputLabel>
 
                     <Select

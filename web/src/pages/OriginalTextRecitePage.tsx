@@ -107,8 +107,8 @@ export function OriginalTextRecitePage() {
             {question.nodes.map((qn, idx) =>
               qn.type === QuestionNodeType.PLACEHOLDER ? (
                 <Box key={idx}>
-                  <FormControl>
-                    <RadioGroup
+                  <FormControl fullWidth>
+{/*                     <RadioGroup
                       name={"question-choice-picker-group"}
                       value={pickedAnswerIndex}
                       onChange={(evt) => setPickedAnswerIndex(parseInt(evt.target.value))}
@@ -131,7 +131,20 @@ export function OriginalTextRecitePage() {
                           value={i}
                         />
                       ))}
-                    </RadioGroup>
+                    </RadioGroup>  */}
+                    <InputLabel id="question-choice-picker-group">{t("Please choose an answer.")}</InputLabel>
+
+                    <Select
+                      labelId={"question-choice-picker-group"}
+                      id={"question-choice-picker"}
+                      value={pickedAnswerIndex}
+                      label={t("Please choose an answer.")}
+                      onChange={(evt) => setPickedAnswerIndex(evt.target.value === null ? null : parseInt(evt.target.value.toString()))}                
+                    >
+                      {question?.choices.map((ch, i) => (
+                        <MenuItem value={ch}>{ch}</MenuItem>
+                      ))}
+                    </Select> 
                   </FormControl>
                 </Box>
               ) : (

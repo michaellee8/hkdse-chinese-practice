@@ -103,23 +103,26 @@ export function generateQuestionFromOriginalEssay(art: OriginalEssay): Question 
     (p) => p && p.subNodes && p.textSegments && p.subNodes.length > 0 && p.textSegments.length > 0
   );
   const para = pickRandomElement(paragraphs);
-  const pickedIndex = randInt(para.subNodes.length);
-  const selectedSeg = para.subNodes.slice(pickedIndex, pickedIndex + 1)
+  const pickedIndex = randInt(para.textSegments.length);
+  const selectedSeg = para.textSegments[pickedIndex]
   const pickedWordIndex =  randInt(selectedSeg.length);
-  const selectedWord = selectedSeg[pickedWordIndex].content
-  const beforeText = selectedWord
+  const selectedWord = selectedSeg[pickedWordIndex]
+  const beforeText = selectedSeg
     .slice(0, pickedWordIndex);
-  const afterText = selectedWord
-    .slice(pickedWordIndex + 1, para.subNodes.length + 1);
+  const afterText = selectedSeg
+    .slice(pickedWordIndex + 1);
   const replacedSegment = selectedWord;
   const choices = [replacedSegment];
   for (let i = 0; i < 4; i++) {
-    const nextSeg = para.subNodes.slice(pickedIndex + 1, pickedIndex + 2);
-    let choice = nextSeg[randInt(nextSeg.length)];
-    while (choices.includes(choice.content)) {
-      choice.content = pickRandomElement(art.allTextSegments);
+    const choosenSegment = pickRandomElement(art.allTextSegments);
+    const choiceIdx = randInt(choosenSegment.length);
+    let choice = choosenSegment[choiceIdx];
+    while (choices.includes(choice)) {
+      const choosenSegment = pickRandomElement(art.allTextSegments);
+      const choiceIdx = randInt(choosenSegment.length);
+      choice = choosenSegment[choiceIdx];
     }
-    choices.push(choice.content);
+    choices.push(choice);
   }
   shuffleArray(choices);
   const correctIndex = choices.findIndex((c) => c === replacedSegment);

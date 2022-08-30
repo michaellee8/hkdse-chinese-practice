@@ -14,7 +14,12 @@ import {
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { generateQuestionFromOriginalEssaySeg, generateQuestionFromOriginalEssay, Question, QuestionNodeType } from "../logic/question";
+import {
+  generateQuestionFromOriginalEssaySeg,
+  generateQuestionFromOriginalEssay,
+  Question,
+  QuestionNodeType,
+} from "../logic/question";
 import { delay } from "../utils";
 
 const showAnswerDelay = 1500;
@@ -30,16 +35,15 @@ export function OriginalTextRecitePage() {
   const [selectedArticleName, setSelectedArticleName] = useState("");
   const [selectedQuestionType, setSelectedQuestionType] = useState("");
   const selectedArticle = values?.find((e) => e.name === selectedArticleName);
-  const questionType = selectedQuestionType
+  const questionType = selectedQuestionType;
   const makeNewQuestion = useCallback(() => {
     if (!selectedArticle || !selectedArticle.original) {
       setQuestion(null);
       return;
     }
-    if (questionType === 'Sentence') {
+    if (questionType === "Sentence") {
       setQuestion(generateQuestionFromOriginalEssaySeg(selectedArticle.original));
-    }
-    else if(questionType === 'Word') {
+    } else if (questionType === "Word") {
       setQuestion(generateQuestionFromOriginalEssay(selectedArticle.original));
     }
   }, [selectedArticle, questionType]);
@@ -103,7 +107,9 @@ export function OriginalTextRecitePage() {
           </Select>
         </FormControl>
         <FormControl fullWidth>
-          <InputLabel id={"question-select-label"}>{t("Please choose the question type.")}</InputLabel>
+          <InputLabel id={"question-select-label"}>
+            {t("Please choose the question type.")}
+          </InputLabel>
           <Select
             labelId={"question-select-label"}
             id={"question-type-select"}
@@ -113,8 +119,8 @@ export function OriginalTextRecitePage() {
               setSelectedQuestionType(evt.target.value as string);
             }}
           >
-            <MenuItem value={'Sentence'}>Sentence</MenuItem>
-            <MenuItem value={'Word'}>Word</MenuItem>
+            <MenuItem value={"Sentence"}>Sentence</MenuItem>
+            <MenuItem value={"Word"}>Word</MenuItem>
           </Select>
         </FormControl>
         <Typography variant={"subtitle1"}>
@@ -126,19 +132,25 @@ export function OriginalTextRecitePage() {
               qn.type === QuestionNodeType.PLACEHOLDER ? (
                 <Box key={idx}>
                   <FormControl fullWidth>
-                    <InputLabel id="question-choice-picker-group">{t("Please choose an answer.")}</InputLabel>
+                    <InputLabel id="question-choice-picker-group">
+                      {t("Please choose an answer.")}
+                    </InputLabel>
 
                     <Select
                       labelId={"question-choice-picker-group"}
                       id={"question-choice-picker"}
                       value={pickedAnswerIndex}
                       label={t("Please choose an answer.")}
-                      onChange={(evt) => setPickedAnswerIndex(evt.target.value === null ? null : parseInt(evt.target.value.toString()))}                
+                      onChange={(evt) =>
+                        setPickedAnswerIndex(
+                          evt.target.value === null ? null : parseInt(evt.target.value.toString())
+                        )
+                      }
                     >
                       {question?.choices.map((ch, i) => (
                         <MenuItem value={ch}>{ch}</MenuItem>
                       ))}
-                    </Select> 
+                    </Select>
                   </FormControl>
                 </Box>
               ) : (

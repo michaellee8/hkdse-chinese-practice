@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { generateQuestionFromOriginalEssay, Question, QuestionNodeType } from "../logic/question";
+import { generateQuestionFromOriginalEssaySeg, generateQuestionFromOriginalEssay, Question, QuestionNodeType } from "../logic/question";
 import { delay } from "../utils";
 
 const showAnswerDelay = 1500;
@@ -28,14 +28,21 @@ export function OriginalTextRecitePage() {
   const [question, setQuestion] = useState<Question | null>(null);
   const { t } = useTranslation();
   const [selectedArticleName, setSelectedArticleName] = useState("");
+  const [selectedQuestionType, setSelectedQuestionType] = useState("");
   const selectedArticle = values?.find((e) => e.name === selectedArticleName);
+  const questionType = selectedQuestionType
   const makeNewQuestion = useCallback(() => {
     if (!selectedArticle || !selectedArticle.original) {
       setQuestion(null);
       return;
     }
-    setQuestion(generateQuestionFromOriginalEssay(selectedArticle.original));
-  }, [selectedArticle]);
+    if (questionType === 'Sentence') {
+      setQuestion(generateQuestionFromOriginalEssaySeg(selectedArticle.original));
+    }
+    else if(questionType === 'Word') {
+      setQuestion(generateQuestionFromOriginalEssay(selectedArticle.original));
+    }
+  }, [selectedArticle, questionType]);
   const [questionNum, setQuestionNum] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [, setShowSolution] = useState(false);
@@ -93,6 +100,21 @@ export function OriginalTextRecitePage() {
             {values?.map((e) => (
               <MenuItem value={e.name}>{e.name}</MenuItem>
             ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel id={"question-select-label"}>{t("Please choose the question type.")}</InputLabel>
+          <Select
+            labelId={"question-select-label"}
+            id={"question-type-select"}
+            value={selectedQuestionType}
+            label={t("Please choose a question type.")}
+            onChange={(evt) => {
+              setSelectedQuestionType(evt.target.value as string);
+            }}
+          >
+            <MenuItem value={'Sentence'}>Sentence</MenuItem>
+            <MenuItem value={'Word'}>Word</MenuItem>
           </Select>
         </FormControl>
         <Typography variant={"subtitle1"}>

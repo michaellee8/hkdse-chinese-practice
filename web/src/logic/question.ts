@@ -35,7 +35,7 @@ function shuffleArray<T>(array: T[]) {
 
 const stopChars = new Set(["！", "。"]);
 
-export function generateQuestionFromOriginalEssay(art: OriginalEssay): Question {
+export function generateQuestionFromOriginalEssaySeg(art: OriginalEssay): Question {
   const paragraphs = art.paragraphs.filter(
     (p) => p && p.subNodes && p.textSegments && p.subNodes.length > 0 && p.textSegments.length > 0
   );
@@ -89,6 +89,54 @@ export function generateQuestionFromOriginalEssay(art: OriginalEssay): Question 
       {
         type: QuestionNodeType.PLACEHOLDER,
         content: replacedSegment.content,
+      },
+      {
+        type: QuestionNodeType.CONTENT,
+        content: afterText,
+      },
+    ],
+  };
+}
+
+export function generateQuestionFromOriginalEssay(art: OriginalEssay): Question {
+  const paragraphs = art.paragraphs.filter(
+    (p) => p && p.subNodes && p.textSegments && p.subNodes.length > 0 && p.textSegments.length > 0
+  );
+  const para = pickRandomElement(paragraphs);
+  const pickedIndex = randInt(para.textSegments.length);
+  const selectedSeg = para.textSegments[pickedIndex]
+  const pickedWordIndex =  randInt(selectedSeg.length);
+  const selectedWord = selectedSeg[pickedWordIndex]
+  const beforeText = selectedSeg
+    .slice(0, pickedWordIndex);
+  const afterText = selectedSeg
+    .slice(pickedWordIndex + 1);
+  const replacedSegment = selectedWord;
+  const choices = [replacedSegment];
+  for (let i = 0; i < 4; i++) {
+    const choosenSegment = pickRandomElement(art.allTextSegments);
+    const choiceIdx = randInt(choosenSegment.length);
+    let choice = choosenSegment[choiceIdx];
+    while (choices.includes(choice)) {
+      const choosenSegment = pickRandomElement(art.allTextSegments);
+      const choiceIdx = randInt(choosenSegment.length);
+      choice = choosenSegment[choiceIdx];
+    }
+    choices.push(choice);
+  }
+  shuffleArray(choices);
+  const correctIndex = choices.findIndex((c) => c === replacedSegment);
+  return {
+    choices,
+    correctChoiceIndex: correctIndex,
+    nodes: [
+      {
+        type: QuestionNodeType.CONTENT,
+        content: beforeText,
+      },
+      {
+        type: QuestionNodeType.PLACEHOLDER,
+        content: replacedSegment,
       },
       {
         type: QuestionNodeType.CONTENT,

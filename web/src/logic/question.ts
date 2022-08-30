@@ -35,7 +35,7 @@ function shuffleArray<T>(array: T[]) {
 
 const stopChars = new Set(["！", "。"]);
 
-export function generateQuestionFromOriginalEssay(art: OriginalEssay): Question {
+export function generateQuestionFromOriginalEssaySeg(art: OriginalEssay): Question {
   const paragraphs = art.paragraphs.filter(
     (p) => p && p.subNodes && p.textSegments && p.subNodes.length > 0 && p.textSegments.length > 0
   );
@@ -89,6 +89,51 @@ export function generateQuestionFromOriginalEssay(art: OriginalEssay): Question 
       {
         type: QuestionNodeType.PLACEHOLDER,
         content: replacedSegment.content,
+      },
+      {
+        type: QuestionNodeType.CONTENT,
+        content: afterText,
+      },
+    ],
+  };
+}
+
+export function generateQuestionFromOriginalEssay(art: OriginalEssay): Question {
+  const paragraphs = art.paragraphs.filter(
+    (p) => p && p.subNodes && p.textSegments && p.subNodes.length > 0 && p.textSegments.length > 0
+  );
+  const para = pickRandomElement(paragraphs);
+  const pickedIndex = randInt(para.subNodes.length);
+  const selectedSeg = para.subNodes.slice(pickedIndex, pickedIndex + 1)
+  const pickedWordIndex =  randInt(selectedSeg.length);
+  const selectedWord = selectedSeg[pickedWordIndex].content
+  const beforeText = selectedWord
+    .slice(0, pickedWordIndex);
+  const afterText = selectedWord
+    .slice(pickedWordIndex + 1, para.subNodes.length + 1);
+  const replacedSegment = selectedWord;
+  const choices = [replacedSegment];
+  for (let i = 0; i < 4; i++) {
+    const nextSeg = para.subNodes.slice(pickedIndex + 1, pickedIndex + 2);
+    let choice = nextSeg[randInt(nextSeg.length)];
+    while (choices.includes(choice.content)) {
+      choice.content = pickRandomElement(art.allTextSegments);
+    }
+    choices.push(choice.content);
+  }
+  shuffleArray(choices);
+  const correctIndex = choices.findIndex((c) => c === replacedSegment);
+  return {
+    choices,
+    correctChoiceIndex: correctIndex,
+    nodes: [
+      {
+        type: QuestionNodeType.CONTENT,
+        content: beforeText,
+      },
+      {
+        type: QuestionNodeType.PLACEHOLDER,
+        content: replacedSegment,
       },
       {
         type: QuestionNodeType.CONTENT,
